@@ -73,7 +73,7 @@ int main()
 
 
 	HANDLE fileHandle;
-	hr = CfOpenFileWithOplock(fullPath, CF_OPEN_FILE_FLAGS::CF_OPEN_FILE_FLAG_WRITE_ACCESS, &fileHandle);
+	hr = CfOpenFileWithOplock(L"c:\\Users\\eduar\\OneDrive\\férias.txt", CF_OPEN_FILE_FLAGS::CF_OPEN_FILE_FLAG_WRITE_ACCESS, &fileHandle);
 	if (S_OK != hr)
 	{
 		std::cout << "Failed to open file\n";
@@ -83,6 +83,15 @@ int main()
 		_getch();
 		return hr;
 	}
+
+	int size = sizeof(CF_PLACEHOLDER_STANDARD_INFO) + 32;
+	CF_PLACEHOLDER_STANDARD_INFO* standard_info = (CF_PLACEHOLDER_STANDARD_INFO*)new BYTE[size];
+	DWORD returnlength(0);
+
+	hr = CfGetPlaceholderInfo(fileHandle, CF_PLACEHOLDER_INFO_STANDARD, standard_info,
+		size,
+		&returnlength);
+
 	USN tmpUsn;
 	tmpUsn = usn;
 	// At this point USN is still valid.
@@ -137,7 +146,7 @@ int main()
 	}
 
 
-	hr = CfOpenFileWithOplock(fullPath2, CF_OPEN_FILE_FLAGS::CF_OPEN_FILE_FLAG_WRITE_ACCESS, &fileHandle);
+	hr = CfOpenFileWithOplock(L"c:\\Users\\eduar\\OneDrive - AmWINS Group, Inc (USA)", CF_OPEN_FILE_FLAGS::CF_OPEN_FILE_FLAG_WRITE_ACCESS, &fileHandle);
 	if (S_OK != hr)
 	{
 		std::cout << "Failed to open file\n";
@@ -147,6 +156,10 @@ int main()
 		_getch();
 		return hr;
 	}
+
+	hr = CfGetPlaceholderInfo(fileHandle, CF_PLACEHOLDER_INFO_STANDARD, standard_info,
+		size,
+		&returnlength);
 
 	tmpUsn = usn;
 	// At this point USN is still valid.
